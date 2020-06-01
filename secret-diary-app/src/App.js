@@ -1,16 +1,16 @@
 import React, { useState, useEffect, Fragment} from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
-// import Layout from './components/Layout/Layout'
-// import Backdrop from './components/Backdrop/Backdrop'
-// import Toolbar from './components/Toolbar/Toolbar'
-// import MainNavigation from './components/Navigation/MainNavigation/MainNavigation'
-// import MobileNavigation from './components/Navigation/MobileNavigation/MobileNavigation'
-// import ErrorHandler from './components/ErrorHandler/ErrorHandler'
-// import FeedPage from './pages/Feed/Feed'
-// import SinglePostPage from './pages/Feed/SinglePost/SinglePost'
-// import LoginPage from './pages/Auth/Login'
-// import SignupPage from './pages/Auth/Signup'
+import Layout from './components/Layout/Layout'
+import Backdrop from './components/Backdrop/Backdrop'
+import Toolbar from './components/Toolbar/Toolbar'
+import MainNavigation from './components/Navigation/MainNavigation/MainNavigation'
+import MobileNavigation from './components/Navigation/MobileNavigation/MobileNavigation'
+import ErrorHandler from './components/ErrorHandler/ErrorHandler'
+import FeedPage from './pages/Feed/Feed'
+import SinglePostPage from './pages/Feed/SinglePost/SinglePost'
+import LoginPage from './pages/Auth/Login'
+import SignupPage from './pages/Auth/Signup'
 
 export default function App() {
   const [ showBackdrop, setShowBackDrop ] = useState(false)
@@ -42,18 +42,18 @@ export default function App() {
     setAutoLogout(remainingMilliseconds)
   }, [])
 
-  mobileNavHandler = isOpen => {
+  const mobileNavHandler = isOpen => {
     setShowMobileNav(isOpen)
     setShowBackDrop(isOpen)
   }
 
-  backdropClickHandler = () => {
+  const backdropClickHandler = () => {
     setShowMobileNav(false)
     setShowBackDrop(false)
     setError(null)
   }
 
-  logoutHandler = () => {
+  const logoutHandler = () => {
     setIsAuth(false)
     setToken(null)
     localStorage.removeItem('token')
@@ -61,7 +61,7 @@ export default function App() {
     localStorage.removeItem('userId')
   }
 
-  loginHandler = (event, authData) => {
+  const loginHandler = (event, authData) => {
     event.preventDefault()
     setAuthLoading(true)
 
@@ -100,7 +100,7 @@ export default function App() {
       })
   }
 
-  signupHandler = (event, authData) => {
+  const signupHandler = (event, authData) => {
     event.preventDefault()
     setAuthLoading(true)
 
@@ -133,13 +133,13 @@ export default function App() {
       })
   }
 
-  setAutoLogout = milliseconds => {
+  const setAutoLogout = milliseconds => {
     setTimeout(() => {
       logoutHandler()
     }, milliseconds)
   }
 
-  errorHandler = () => {
+  const errorHandler = () => {
     setError(null)
   }
 
@@ -152,7 +152,7 @@ export default function App() {
             </Route>
 
             <Route path="/:postId">
-              <SinglePostPage {...props} userId={userId} token={token}/>
+              <SinglePostPage userId={userId} token={token}/>
             </Route>
 
             <Redirect to="/" />
@@ -160,11 +160,11 @@ export default function App() {
           
           <Switch>
             <Route path="/" exact>
-              <LoginPage {...props} onLogin={loginHandler} loading={state.authLoading} />
+              <LoginPage onLogin={loginHandler} loading={authLoading} />
             </Route>
 
             <Route path="/signup" exact>
-              <SignupPage {...props} onSignup={signupHandler} loading={authLoading}/>
+              <SignupPage onSignup={signupHandler} loading={authLoading}/>
             </Route>
             
             <Redirect to="/" />
