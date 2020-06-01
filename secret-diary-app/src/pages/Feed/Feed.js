@@ -31,7 +31,7 @@ export default function Feed() {
     .then(resData => {
       setStatus(resData.status)
     })
-    .catch(catchError)
+    .catch(err => console.log(err))
 
     loadPosts()
   }, [])
@@ -62,7 +62,7 @@ export default function Feed() {
         setTotalPosts(resData.totalItems)
         setPostsLoading(false)
       })
-      .catch(catchError)
+      .catch(err => console.log(err))
   }
 
   const statusUpdateHandler = event => {
@@ -77,7 +77,7 @@ export default function Feed() {
       .then(resData => {
         console.log(resData)
       })
-      .catch(catchError)
+      .catch(err => console.log(err))
   }
 
   const newPostHandler = () => {
@@ -175,27 +175,25 @@ export default function Feed() {
     setError(null)
   }
 
-  const catchError = error => {
-    setError(error)
-  }
-
+  // const catchError = error => setError(error)
+  
   return (
     <Fragment>
-      <ErrorHandler error={error} onHandle={this.errorHandler} />
+      <ErrorHandler error={error} onHandle={errorHandler} />
       <FeedEdit
         editing={isEditing}
         selectedPost={editPost}
         loading={editLoading}
-        onCancelEdit={this.cancelEditHandler}
-        onFinishEdit={this.finishEditHandler}
+        onCancelEdit={cancelEditHandler}
+        onFinishEdit={finishEditHandler}
       />
       <section className="feed__status">
-        <form onSubmit={this.statusUpdateHandler}>
+        <form onSubmit={statusUpdateHandler}>
           <Input
             type="text"
             placeholder="Your status"
             control="input"
-            onChange={this.statusInputChangeHandler}
+            onChange={statusInputChangeHandler}
             value={status}
           />
           <Button mode="flat" type="submit">
@@ -204,7 +202,7 @@ export default function Feed() {
         </form>
       </section>
       <section className="feed__control">
-        <Button mode="raised" design="accent" onClick={this.newPostHandler}>
+        <Button mode="raised" design="accent" onClick={newPostHandler}>
           New Post
         </Button>
       </section>
@@ -219,8 +217,8 @@ export default function Feed() {
         ) : null}
         {!postsLoading && (
           <Paginator
-            onPrevious={this.loadPosts.bind(this, 'previous')}
-            onNext={this.loadPosts.bind(this, 'next')}
+            onPrevious={loadPosts.bind(this, 'previous')}
+            onNext={loadPosts.bind(this, 'next')}
             lastPage={Math.ceil(totalPosts / 2)}
             currentPage={postPage}
           >
@@ -233,8 +231,8 @@ export default function Feed() {
                 title={post.title}
                 image={post.imageUrl}
                 content={post.content}
-                onStartEdit={this.startEditPostHandler.bind(this, post._id)}
-                onDelete={this.deletePostHandler.bind(this, post._id)}
+                onStartEdit={startEditPostHandler.bind(this, post._id)}
+                onDelete={deletePostHandler.bind(this, post._id)}
               />
             ))}
           </Paginator>

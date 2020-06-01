@@ -29,39 +29,44 @@ const POST_FORM = {
   }
 }
 
-export default function FeedEdit(props) {
+export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, onFinishEdit}) {
   const [ postForm, setPostForm ] = useState(POST_FORM)
   const [ formIsValid, setFormIsValid ] = useState(false)
   const [ imagePreview, setImagePreview ] = useState(null)
   const [ isValid, setIsValid ] = useState(false)
+  
+  //
+  const [ prevEditing, setPrevEditing ] = useState(editing)
+  const [ prevSelectedPost, setPrevSelectedPost ] = useState(selectedPost)
 
   useEffect(() => {
     if (
-      props.editing &&
-      prevProps.editing !== props.editing &&
-      prevProps.selectedPost !== props.selectedPost
+      editing &&
+      //check if the logic here is correct
+      prevEditing !== editing &&
+      prevSelectedPost !== selectedPost
     ) {
-      const postForm = {
+      const updatedPostForm = {
         title: {
-          ...title,
-          value: props.selectedPost.title,
+          ...postForm.title,
+          value: selectedPost.title,
           valid: true
         },
         image: {
-          ...image,
-          value: props.selectedPost.imagePath,
+          ...postForm.image,
+          value: selectedPost.imagePath,
           valid: true
         },
         content: {
-          ...content,
-          value: props.selectedPost.content,
+          ...postForm.content,
+          value: selectedPost.content,
           valid: true
         }
       }
-      setPostForm(postForm)
+      setPostForm(updatedPostForm)
       setFormIsValid(true)
     }
-  }, [{props}])
+  }, [])
 
   const postInputChangeHandler = (input, value, files) => {
     if (files) {
@@ -74,27 +79,25 @@ export default function FeedEdit(props) {
         })
     }
     setIsValid(true)
-    setState(prevState => {
-      for (const validator of prevpostForm[input].validators) {
-        isValid = isValid && validator(value)
+
+    for (const validator of postForm[input].validators) {
+      isValid = isValid && validator(value)
+    }
+    const updatedForm = {
+      ...postForm,
+      [input]: {
+        ...postForm[input],
+        valid: isValid,
+        value: files ? files[0] : value
       }
-      const updatedForm = {
-        ...prevpostForm,
-        [input]: {
-          ...prevpostForm[input],
-          valid: isValid,
-          value: files ? files[0] : value
-        }
-      }
-      let formIsValid = true
-      for (const inputName in updatedForm) {
-        formIsValid = formIsValid && updatedForm[inputName].valid
-      }
-      return {
-        postForm: updatedForm,
-        formIsValid: formIsValid
-      }
-    })
+    }
+
+    let formIsValid = true
+    for (const inputName in updatedForm) {
+      formIsValid = formIsValid && updatedForm[inputName].valid
+    }
+    setPostForm(updatedForm)
+    setFormIsValid(formIsValid)
   }
 
   const inputBlurHandler = input => {
