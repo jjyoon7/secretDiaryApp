@@ -147,49 +147,26 @@ export default function App() {
     <Fragment>
         {isAuth ? 
           <Switch>
-            <Route
-              path="/"
-              exact
-              render={props => (
+            <Route path="/" exact>
                 <FeedPage userId={userId} token={token} />
-              )}
-            />
-            <Route
-              path="/:postId"
-              render={props => (
-                <SinglePostPage
-                  {...props}
-                  userId={userId}
-                  token={token}
-                />
-              )}
-            />
+            </Route>
+
+            <Route path="/:postId">
+              <SinglePostPage {...props} userId={userId} token={token}/>
+            </Route>
+
             <Redirect to="/" />
           </Switch> : 
           
           <Switch>
-            <Route
-              path="/"
-              exact
-              render={props => (
-                <LoginPage
-                  {...props}
-                  onLogin={loginHandler}
-                  loading={state.authLoading}
-                />
-              )}
-            />
-            <Route
-              path="/signup"
-              exact
-              render={props => (
-                <SignupPage
-                  {...props}
-                  onSignup={signupHandler}
-                  loading={authLoading}
-                />
-              )}
-            />
+            <Route path="/" exact>
+              <LoginPage {...props} onLogin={loginHandler} loading={state.authLoading} />
+            </Route>
+
+            <Route path="/signup" exact>
+              <SignupPage {...props} onSignup={signupHandler} loading={authLoading}/>
+            </Route>
+            
             <Redirect to="/" />
           </Switch>
           }
