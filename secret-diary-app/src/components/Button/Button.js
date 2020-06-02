@@ -4,27 +4,27 @@ import { Link } from 'react-router-dom'
 import './Button.css'
 
 const button = props =>
-  !props.link ? (
+  !link ? (
     <button
       className={[
         'button',
-        `button--${props.design}`,
-        `button--${props.mode}`
+        `button--${design}`,
+        `button--${mode}`
       ].join(' ')}
-      onClick={props.onClick}
-      disabled={props.disabled || props.loading}
-      type={props.type}
+      onClick={onClick}
+      disabled={disabled || loading}
+      type={type}
     >
-      {props.loading ? 'Loading...' : props.children}
+      {loading ? 'Loading...' : props.children}
     </button>
   ) : (
     <Link
       className={[
         'button',
-        `button--${props.design}`,
-        `button--${props.mode}`
+        `button--${design}`,
+        `button--${mode}`
       ].join(' ')}
-      to={props.link}
+      to={link}
     >
       {props.children}
     </Link>

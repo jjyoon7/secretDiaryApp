@@ -66,7 +66,7 @@ export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, 
       setPostForm(updatedPostForm)
       setFormIsValid(true)
     }
-  }, [])
+  }, [editing, selectedPost])
 
   const postInputChangeHandler = (input, value, files) => {
     if (files) {
