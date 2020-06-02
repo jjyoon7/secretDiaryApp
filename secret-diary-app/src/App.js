@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Fragment} from 'react'
-import { Route, Switch, Redirect } from 'react-router-dom'
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom'
+
 
 import Layout from './components/Layout/Layout'
 import Backdrop from './components/Backdrop/Backdrop'
@@ -122,8 +123,12 @@ export default function App() {
         setIsAuth(false)
         setAuthLoading(false)
 
+        
         //find a way to not use this.props
-        this.props.history.replace('/')
+        // this.props.history.replace('/')
+        
+        let history = useHistory()
+        history.replace('/')
       })
       .catch(err => {
         console.log(err)
