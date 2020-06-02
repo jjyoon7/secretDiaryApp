@@ -7,9 +7,9 @@ import NavigationItems from '../NavigationItems/NavigationItems'
 
 import './MainNavigation.css'
 
-const mainNavigation = props => (
+const mainNavigation = ({onLogout, isAuth, onOpenMobileNav}) => (
   <nav className="main-nav">
-    <MobileToggle onOpen={props.onOpenMobileNav} />
+    <MobileToggle onOpen={onOpenMobileNav} />
     <div className="main-nav__logo">
       <NavLink to="/">
         <Logo />
@@ -17,7 +17,7 @@ const mainNavigation = props => (
     </div>
     <div className="spacer" />
     <ul className="main-nav__items">
-      <NavigationItems isAuth={props.isAuth} onLogout={props.onLogout} />
+      <NavigationItems isAuth={isAuth} onLogout={onLogout} />
     </ul>
   </nav>
 )

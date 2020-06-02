@@ -3,7 +3,7 @@ import React from 'react'
 import Button from '../../Button/Button'
 import './Post.css'
 
-const post = props => (
+const post = ({author, date, id, title, onStartEdit, onDelete}) => (
   <article className="post">
     <header className="post__header">
       <h3 className="post__meta">

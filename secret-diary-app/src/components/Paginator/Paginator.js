@@ -2,17 +2,17 @@ import React from 'react'
 
 import './Paginator.css'
 
-const paginator = props => (
+const paginator = ({currentPage, onPrevious, onNext, lastPage}) => (
   <div className="paginator">
-    {props.children}
+    {/* {props.children} */}
     <div className="paginator__controls">
-      {props.currentPage > 1 && (
-        <button className="paginator__control" onClick={props.onPrevious}>
+      {currentPage > 1 && (
+        <button className="paginator__control" onClick={onPrevious}>
           Previous
         </button>
       )}
-      {props.currentPage < props.lastPage && (
-        <button className="paginator__control" onClick={props.onNext}>
+      {currentPage < lastPage && (
+        <button className="paginator__control" onClick={onNext}>
           Next
         </button>
       )}

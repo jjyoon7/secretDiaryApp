@@ -21,6 +21,7 @@ export default function App() {
   const [ userId, setUserId ] = useState(null)
   const [ authLoading, setAuthLoading ] = useState(false)
   const [ error, setError ] = useState(null)
+  let history = useHistory()
 
 
   useEffect(() => {
@@ -126,8 +127,7 @@ export default function App() {
         
         //find a way to not use this.props
         // this.props.history.replace('/')
-        
-        let history = useHistory()
+
         history.replace('/')
       })
       .catch(err => {

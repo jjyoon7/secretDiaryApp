@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 
 import Input from '../../components/Form/Input/Input'
 import Button from '../../components/Button/Button'
 import { required, length, email } from '../../util/validators'
 import Auth from './Auth'
 
-class Login extends Component {
-  state = {
+export default function Login({loading}) {
+  const loginForm = {
     loginForm: {
       email: {
         value: '',
@@ -23,17 +23,18 @@ class Login extends Component {
       formIsValid: false
     }
   }
+  
+  const [ loginFormObj, setLoginFormObj ] = useState(loginForm)
 
-  inputChangeHandler = (input, value) => {
-    this.setState(prevState => {
+  const inputChangeHandler = (input, value) => {
       let isValid = true
-      for (const validator of prevState.loginForm[input].validators) {
+      for (const validator of loginFormObj.loginForm[input].validators) {
         isValid = isValid && validator(value)
       }
       const updatedForm = {
-        ...prevState.loginForm,
+        ...loginFormObj.loginForm,
         [input]: {
-          ...prevState.loginForm[input],
+          ...loginFormObj.loginForm[input],
           valid: isValid,
           value: value
         }
@@ -46,63 +47,61 @@ class Login extends Component {
         loginForm: updatedForm,
         formIsValid: formIsValid
       }
-    })
   }
 
-  inputBlurHandler = input => {
-    this.setState(prevState => {
+  const inputBlurHandler = input => {
       return {
         loginForm: {
-          ...prevState.loginForm,
+          ...loginFormObj.loginForm,
           [input]: {
-            ...prevState.loginForm[input],
+            ...loginFormObj.loginForm[input],
             touched: true
           }
         }
       }
-    })
   }
 
-  render() {
-    return (
-      <Auth>
-        <form
-          onSubmit={e =>
-            this.props.onLogin(e, {
-              email: this.state.loginForm.email.value,
-              password: this.state.loginForm.password.value
-            })
-          }
-        >
-          <Input
-            id="email"
-            label="Your E-Mail"
-            type="email"
-            control="input"
-            onChange={this.inputChangeHandler}
-            onBlur={this.inputBlurHandler.bind(this, 'email')}
-            value={this.state.loginForm['email'].value}
-            valid={this.state.loginForm['email'].valid}
-            touched={this.state.loginForm['email'].touched}
-          />
-          <Input
-            id="password"
-            label="Password"
-            type="password"
-            control="input"
-            onChange={this.inputChangeHandler}
-            onBlur={this.inputBlurHandler.bind(this, 'password')}
-            value={this.state.loginForm['password'].value}
-            valid={this.state.loginForm['password'].valid}
-            touched={this.state.loginForm['password'].touched}
-          />
-          <Button design="raised" type="submit" loading={this.props.loading}>
-            Login
-          </Button>
-        </form>
-      </Auth>
-    )
+  const onLogin = (e) => {
+    return {
+      email: loginForm.email.value,
+      password: loginForm.password.value
+    }
   }
+
+  return (
+    <Auth>
+      <form
+        onSubmit={onLogin}
+      >
+        <Input
+          id="email"
+          label="Your E-Mail"
+          type="email"
+          control="input"
+          onChange={inputChangeHandler}
+          onBlur={inputBlurHandler.bind(this, 'email')}
+          value={loginForm['email'].value}
+          valid={loginForm['email'].valid}
+          touched={loginForm['email'].touched}
+        />
+        <Input
+          id="password"
+          label="Password"
+          type="password"
+          control="input"
+          onChange={inputChangeHandler}
+          onBlur={inputBlurHandler.bind(this, 'password')}
+          value={loginForm['password'].value}
+          valid={loginForm['password'].valid}
+          touched={loginForm['password'].touched}
+        />
+        <Button design="raised" type="submit" loading={loading}>
+          Login
+        </Button>
+      </form>
+    </Auth>
+  )
+
 }
 
-export default Login
+

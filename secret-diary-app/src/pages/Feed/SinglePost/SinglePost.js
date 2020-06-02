@@ -10,9 +10,10 @@ export default function SinglePost() {
   const [ date, setDate ] = useState('')
   const [ image, setImage ] = useState('')
   const [ content, setContent ] = useState('')
+  const { postId } = useParams()
 
   useEffect(() => {
-    const { postId } = useParams()
+    
     // const postId = this.props.match.params.postId
     fetch('URL')
       .then(res => {
@@ -28,7 +29,7 @@ export default function SinglePost() {
         const updatedDate = new Date(resData.post.createdAt).toLocaleDateString('en-US')
         setDate(updatedDate)
 
-        setContet(resData.post.content)
+        setContent(resData.post.content)
 
       })
       .catch(err => {
