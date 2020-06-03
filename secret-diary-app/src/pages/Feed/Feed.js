@@ -105,12 +105,22 @@ export default function Feed() {
     setEditLoading(true)
 
     // Set up data (with image!)
-    let url = 'URL'
+    let url = 'http://localhost:5000/feed/post'
+    let method = 'POST'
     if (editPost) {
       url = 'URL'
     }
 
-    fetch(url)
+    fetch(url, {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        body: postData.title,
+        content: postData.content
+      })
+    })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error('Creating or editing a post failed!')
