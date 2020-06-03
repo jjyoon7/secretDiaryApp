@@ -7,7 +7,6 @@ import Auth from './Auth'
 
 export default function Login({loading}) {
   const loginForm = {
-    loginForm: {
       email: {
         value: '',
         valid: false,
@@ -21,20 +20,19 @@ export default function Login({loading}) {
         validators: [required, length({ min: 5 })]
       },
       formIsValid: false
-    }
   }
   
   const [ loginFormObj, setLoginFormObj ] = useState(loginForm)
 
   const inputChangeHandler = (input, value) => {
       let isValid = true
-      for (const validator of loginFormObj.loginForm[input].validators) {
+      for (const validator of loginFormObj[input].validators) {
         isValid = isValid && validator(value)
       }
       const updatedForm = {
-        ...loginFormObj.loginForm,
+        ...loginFormObj,
         [input]: {
-          ...loginFormObj.loginForm[input],
+          ...loginFormObj[input],
           valid: isValid,
           value: value
         }
@@ -52,9 +50,9 @@ export default function Login({loading}) {
   const inputBlurHandler = input => {
       return {
         loginForm: {
-          ...loginFormObj.loginForm,
+          ...loginFormObj,
           [input]: {
-            ...loginFormObj.loginForm[input],
+            ...loginFormObj[input],
             touched: true
           }
         }
@@ -63,8 +61,8 @@ export default function Login({loading}) {
 
   const onLogin = (e) => {
     return {
-      email: loginForm.email.value,
-      password: loginForm.password.value
+      email: loginFormObj.email.value,
+      password: loginFormObj.password.value
     }
   }
 
@@ -80,9 +78,9 @@ export default function Login({loading}) {
           control="input"
           onChange={inputChangeHandler}
           onBlur={inputBlurHandler.bind(this, 'email')}
-          value={loginForm['email'].value}
-          valid={loginForm['email'].valid}
-          touched={loginForm['email'].touched}
+          value={loginFormObj['email'].value}
+          valid={loginFormObj['email'].valid}
+          touched={loginFormObj['email'].touched}
         />
         <Input
           id="password"
@@ -91,9 +89,9 @@ export default function Login({loading}) {
           control="input"
           onChange={inputChangeHandler}
           onBlur={inputBlurHandler.bind(this, 'password')}
-          value={loginForm['password'].value}
-          valid={loginForm['password'].valid}
-          touched={loginForm['password'].touched}
+          value={loginFormObj['password'].value}
+          valid={loginFormObj['password'].valid}
+          touched={loginFormObj['password'].touched}
         />
         <Button design="raised" type="submit" loading={loading}>
           Login

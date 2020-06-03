@@ -16,7 +16,7 @@ import SignupPage from './pages/Auth/Signup'
 export default function App() {
   const [ showBackdrop, setShowBackDrop ] = useState(false)
   const [ showMobileNav, setShowMobileNav ] = useState(false)
-  const [ isAuth, setIsAuth ] = useState(true)
+  const [ isAuth, setIsAuth ] = useState(false)
   const [ token, setToken ] = useState(null)
   const [ userId, setUserId ] = useState(null)
   const [ authLoading, setAuthLoading ] = useState(false)
@@ -148,32 +148,32 @@ export default function App() {
     setError(null)
   }
 
+  const authorizedFeed = <Switch>
+  <Route path="/" exact>
+      <FeedPage userId={userId} token={token} />
+  </Route>
+
+  <Route path="/:postId">
+    <SinglePostPage userId={userId} token={token}/>
+  </Route>
+
+  <Redirect to="/" />
+</Switch> 
+
+const unAuthorizedUser = <Switch>
+  <Route path="/" exact>
+    <LoginPage onLogin={loginHandler} loading={authLoading} />
+  </Route>
+  <Route path="/signup" exact>
+    <SignupPage onSignup={signupHandler} loading={authLoading}/>
+  </Route>
+  
+  <Redirect to="/" />
+</Switch>
+
   return (
     <Fragment>
-        {isAuth ? 
-          <Switch>
-            <Route path="/" exact>
-                <FeedPage userId={userId} token={token} />
-            </Route>
-
-            <Route path="/:postId">
-              <SinglePostPage userId={userId} token={token}/>
-            </Route>
-
-            <Redirect to="/" />
-          </Switch> : 
-          
-          <Switch>
-            <Route path="/" exact>
-              <LoginPage onLogin={loginHandler} loading={authLoading} />
-            </Route>
-            <Route path="/signup" exact>
-              <SignupPage onSignup={signupHandler} loading={authLoading}/>
-            </Route>
-            
-            <Redirect to="/" />
-          </Switch>
-          }
+        {isAuth ? authorizedFeed : unAuthorizedUser}
     </Fragment>
   )
 }
