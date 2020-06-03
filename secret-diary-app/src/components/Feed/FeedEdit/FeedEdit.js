@@ -8,7 +8,7 @@ import Image from '../../Image/Image'
 import { required, length } from '../../../util/validators'
 import { generateBase64FromImage } from '../../../util/image'
 
-const POST_FORM = {
+const postForm = {
   title: {
     value: '',
     valid: false,
@@ -30,7 +30,7 @@ const POST_FORM = {
 }
 
 export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, onFinishEdit}) {
-  const [ postForm, setPostForm ] = useState(POST_FORM)
+  const [ postFormObj, setPostForm ] = useState(postForm)
   const [ formIsValid, setFormIsValid ] = useState(false)
   const [ imagePreview, setImagePreview ] = useState(null)
   const [ isValid, setIsValid ] = useState(false)
@@ -40,6 +40,7 @@ export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, 
   const [ prevSelectedPost, setPrevSelectedPost ] = useState(selectedPost)
 
   useEffect(() => {
+    console.log('postFormObj[title]', postFormObj.title.validators)
     if (
       editing &&
       //check if the logic here is correct
@@ -80,13 +81,16 @@ export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, 
     }
     setIsValid(true)
 
-    for (const validator of postForm[input].validators) {
-      isValid = isValid && validator(value)
+    for (const inputName in postFormObj[input]) {
+      isValid = isValid && updatedForm[inputName].validator(value)
     }
+    // for (const validator of postFormObj[input].validators) {
+    //   isValid = isValid && validator(value)
+    // }
     const updatedForm = {
-      ...postForm,
+      ...postFormObj,
       [input]: {
-        ...postForm[input],
+        ...postFormObj[input],
         valid: isValid,
         value: files ? files[0] : value
       }
@@ -101,7 +105,7 @@ export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, 
   }
 
   const inputBlurHandler = input => {
-    const updatedFormDate = POST_FORM[input]
+    const updatedFormDate = postFormObj[input]
     setPostForm(updatedFormDate)
     // setState(prevState => {
     //   return {
@@ -117,19 +121,19 @@ export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, 
   }
 
   const cancelPostChangeHandler = () => {
-    setPostForm(POST_FORM)
+    setPostForm(postForm)
     setFormIsValid(false)
     onCancelEdit()
   }
 
   const acceptPostChangeHandler = () => {
     const post = {
-      title: postForm.title.value,
-      image: postForm.image.value,
-      content: postForm.content.value
+      title: postFormObj.title.value,
+      image: postFormObj.image.value,
+      content: postFormObj.content.value
     }
     onFinishEdit(post)
-    setPostForm(POST_FORM)
+    setPostForm(postForm)
     setFormIsValid(false)
     setImagePreview(null)
   }
@@ -152,9 +156,9 @@ export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, 
             control="input"
             onChange={postInputChangeHandler}
             onBlur={inputBlurHandler.bind(this, 'title')}
-            valid={postForm['title'].valid}
-            touched={postForm['title'].touched}
-            value={postForm['title'].value}
+            // valid={postFormObj.title.valid}
+            // touched={postFormObj['title'].touched}
+            // value={postFormObj['title'].value}
           />
           <FilePicker
             id="image"
@@ -162,8 +166,8 @@ export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, 
             control="input"
             onChange={postInputChangeHandler}
             onBlur={inputBlurHandler.bind(this, 'image')}
-            valid={postForm['image'].valid}
-            touched={postForm['image'].touched}
+            // valid={postFormObj['image'].valid}
+            // touched={postFormObj['image'].touched}
           />
           <div className="new-post__preview-image">
             {!imagePreview && <p>Please choose an image.</p>}
@@ -178,9 +182,9 @@ export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, 
             rows="5"
             onChange={postInputChangeHandler}
             onBlur={inputBlurHandler.bind(this, 'content')}
-            valid={postForm['content'].valid}
-            touched={postForm['content'].touched}
-            value={postForm['content'].value}
+            // valid={postFormObj['content'].valid}
+            // touched={postFormObj['content'].touched}
+            // value={postFormObj['content'].value}
           />
         </form>
       </Modal>
