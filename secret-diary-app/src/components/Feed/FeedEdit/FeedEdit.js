@@ -40,7 +40,7 @@ export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, 
   const [ prevSelectedPost, setPrevSelectedPost ] = useState(selectedPost)
 
   useEffect(() => {
-    console.log('postFormObj[title]', postFormObj.title.validators)
+    console.log('postFormObj.title', postFormObj.title)
     if (
       editing &&
       //check if the logic here is correct
@@ -81,12 +81,10 @@ export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, 
     }
     setIsValid(true)
 
-    for (const inputName in postFormObj[input]) {
-      isValid = isValid && updatedForm[inputName].validator(value)
+    for (let inputName in postFormObj[input]) {
+      setIsValid(isValid && updatedForm[inputName].validator(value))
     }
-    // for (const validator of postFormObj[input].validators) {
-    //   isValid = isValid && validator(value)
-    // }
+
     const updatedForm = {
       ...postFormObj,
       [input]: {
@@ -96,17 +94,15 @@ export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, 
       }
     }
 
-    let formIsValid = true
-    for (const inputName in updatedForm) {
-      formIsValid = formIsValid && updatedForm[inputName].valid
+    for (let inputName in updatedForm) {
+      setFormIsValid(formIsValid && updatedForm[inputName].valid)
     }
     setPostForm(updatedForm)
-    setFormIsValid(formIsValid)
   }
 
   const inputBlurHandler = input => {
     const updatedFormDate = postFormObj[input]
-    setPostForm(updatedFormDate)
+    // setPostForm(updatedFormDate)
     // setState(prevState => {
     //   return {
     //     postForm: {
@@ -121,7 +117,7 @@ export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, 
   }
 
   const cancelPostChangeHandler = () => {
-    setPostForm(postForm)
+    // setPostForm(postForm)
     setFormIsValid(false)
     onCancelEdit()
   }
@@ -149,16 +145,17 @@ export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, 
         onAcceptModal={acceptPostChangeHandler}
         isLoading={loading}
       >
+          {console.log('postformobj in return render state', postFormObj)}
         <form>
           <Input
             id="title"
             label="Title"
             control="input"
             onChange={postInputChangeHandler}
-            onBlur={inputBlurHandler.bind(this, 'title')}
-            // valid={postFormObj.title.valid}
-            // touched={postFormObj['title'].touched}
-            // value={postFormObj['title'].value}
+            // onBlur={inputBlurHandler.bind(this, 'title')}
+            valid={postFormObj.title.valid}
+            touched={postFormObj.title.touched}
+            value={postFormObj.title.value}
           />
           <FilePicker
             id="image"
@@ -166,8 +163,8 @@ export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, 
             control="input"
             onChange={postInputChangeHandler}
             onBlur={inputBlurHandler.bind(this, 'image')}
-            // valid={postFormObj['image'].valid}
-            // touched={postFormObj['image'].touched}
+            valid={postFormObj.image.valid}
+            touched={postFormObj.image.touched}
           />
           <div className="new-post__preview-image">
             {!imagePreview && <p>Please choose an image.</p>}
@@ -182,9 +179,9 @@ export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, 
             rows="5"
             onChange={postInputChangeHandler}
             onBlur={inputBlurHandler.bind(this, 'content')}
-            // valid={postFormObj['content'].valid}
-            // touched={postFormObj['content'].touched}
-            // value={postFormObj['content'].value}
+            valid={postFormObj.content.valid}
+            touched={postFormObj.content.touched}
+            value={postFormObj.content.value}
           />
         </form>
       </Modal>
