@@ -41,7 +41,7 @@ export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, 
   const [ prevSelectedPost, setPrevSelectedPost ] = useState(selectedPost)
 
   useEffect(() => {
-    console.log('postFormObj.title', postFormObj.title)
+
     if (
       editing &&
       //check if the logic here is correct
@@ -146,7 +146,6 @@ export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, 
         onAcceptModal={acceptPostChangeHandler}
         isLoading={loading}
       >
-          {console.log('postformobj in return render state', postFormObj)}
         <form>
           <Input
             id="title"

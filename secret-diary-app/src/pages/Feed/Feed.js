@@ -21,7 +21,6 @@ export default function Feed() {
   const [ error, setError ] = useState('')
 
   useEffect(() => {
-    console.log('postsLoading intro',postsLoading)
     fetch('http://localhost:5000/feed/posts')
     .then(res => {
       if (res.status !== 200) {
@@ -34,7 +33,6 @@ export default function Feed() {
       setPosts(resData.posts)
       setTotalPosts(resData.totalItems)
       setPostsLoading(false)
-      console.log('postsLoading after fetched',postsLoading)
       // setStatus(resData.status)
     })
     .catch(err => console.log(err))
@@ -104,12 +102,14 @@ export default function Feed() {
   const finishEditHandler = postData => {
     setEditLoading(true)
 
+    console.log(postData)
+
     // Set up data (with image!)
     let url = 'http://localhost:5000/feed/post'
     let method = 'POST'
-    if (editPost) {
-      url = 'URL'
-    }
+    // if (editPost) {
+    //   url = 'URL'
+    // }
 
     fetch(url, {
       method: method,
@@ -125,9 +125,11 @@ export default function Feed() {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error('Creating or editing a post failed!')
         }
+        console.loge('res in finished Edit Handler', res)
         return res.json()
       })
       .then(resData => {
+        console.log('resData in finishEdithandler', resData)
         const post = {
           _id: resData.post._id,
           title: resData.post.title,
