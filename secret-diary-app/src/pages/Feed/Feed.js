@@ -14,14 +14,15 @@ export default function Feed() {
   const [ posts, setPosts ] = useState([])
   const [ totalPosts, setTotalPosts ] = useState(0)
   const [ editPost, setEditPost ] = useState(null)
-  const [ status, setStatus ] = useState('')
+  const [ data, setData ] = useState('')
   const [ postPage, setPostPage ] = useState(1)
   const [ postsLoading, setPostsLoading ] = useState(true)
   const [ editLoading, setEditLoading ] = useState(false)
   const [ error, setError ] = useState('')
 
   useEffect(() => {
-    fetch('URL')
+    console.log('postsLoading intro',postsLoading)
+    fetch('http://localhost:5000/feed/posts')
     .then(res => {
       if (res.status !== 200) {
         throw new Error('Failed to fetch user status.')
@@ -29,7 +30,12 @@ export default function Feed() {
       return res.json()
     })
     .then(resData => {
-      setStatus(resData.status)
+      console.log('resData', resData)
+      setPosts(resData.posts)
+      setTotalPosts(resData.totalItems)
+      setPostsLoading(false)
+      console.log('postsLoading after fetched',postsLoading)
+      // setStatus(resData.status)
     })
     .catch(err => console.log(err))
 
@@ -50,7 +56,7 @@ export default function Feed() {
       page--
       setPostPage(page)
     }
-    fetch('URL')
+    fetch('http://localhost:5000/feed/posts')
       .then(res => {
         if (res.status !== 200) {
           throw new Error('Failed to fetch posts.')
@@ -146,7 +152,7 @@ export default function Feed() {
   }
 
   const statusInputChangeHandler = (input, value) => {
-    setStatus(value)
+    setData(value)
   }
 
   const deletePostHandler = postId => {
@@ -177,6 +183,20 @@ export default function Feed() {
 
   // const catchError = error => setError(error)
   
+  const fetchedPosts = posts.map(post => (
+    <Post
+      key={post._id}
+      id={post._id}
+      author={post.creator.name}
+      date={new Date(post.createdAt).toLocaleDateString('en-US')}
+      title={post.title}
+      image={post.imageUrl}
+      content={post.content}
+      onStartEdit={startEditPostHandler.bind(this, post._id)}
+      onDelete={deletePostHandler.bind(this, post._id)}
+    />
+  ))
+
   return (
     <Fragment>
       <ErrorHandler error={error} onHandle={errorHandler} />
@@ -194,7 +214,7 @@ export default function Feed() {
             placeholder="Your status"
             control="input"
             onChange={statusInputChangeHandler}
-            value={status}
+            value={data}
           />
           <Button mode="flat" type="submit">
             Update
@@ -207,15 +227,16 @@ export default function Feed() {
         </Button>
       </section>
       <section className="feed">
-        {postsLoading && (
+        {!postsLoading && posts.length <= 0 ? "Share secret" : fetchedPosts }
+        {/* {postsLoading && (
           <div style={{ textAlign: 'center', marginTop: '2rem' }}>
             <Loader />
           </div>
-        )}
-        {posts.length <= 0 && !postsLoading ? (
+        )} */}
+        {/* {posts.length <= 0 && !postsLoading ? (
           <p style={{ textAlign: 'center' }}>No posts found.</p>
-        ) : null}
-        {!postsLoading && (
+        ) : null} */}
+        {/* {!postsLoading && (
           <Paginator
             onPrevious={loadPosts.bind(this, 'previous')}
             onNext={loadPosts.bind(this, 'next')}
@@ -236,7 +257,7 @@ export default function Feed() {
               />
             ))}
           </Paginator>
-        )}
+        )} */}
       </section>
     </Fragment>
   )

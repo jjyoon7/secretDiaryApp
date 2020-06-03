@@ -167,7 +167,6 @@ export default function App() {
             <Route path="/" exact>
               <LoginPage onLogin={loginHandler} loading={authLoading} />
             </Route>
-
             <Route path="/signup" exact>
               <SignupPage onSignup={signupHandler} loading={authLoading}/>
             </Route>

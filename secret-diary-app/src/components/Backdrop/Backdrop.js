@@ -1,15 +1,20 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createPortal } from 'react-dom'
+import usePortal from '../../hooks/usePortal'
 
 import './Backdrop.css'
 
-const backdrop = props =>
-  ReactDOM.createPortal(
-    <div
-      className={['backdrop', props.open ? 'open' : ''].join(' ')}
-      onClick={props.onClick}
-    />,
-    document.getElementById('backdrop-root')
-  )
+const Backdrop = ({ id, children, open, onClick }) => {
+  const target = usePortal(id)
 
-export default backdrop
+  return createPortal(
+    children,
+    target,
+    <div
+    className={['backdrop', open ? 'open' : ''].join(' ')}
+    onClick={onClick}
+  />
+  )
+}
+
+export default Backdrop
