@@ -7,7 +7,6 @@ import Auth from './Auth'
 
 export default function Signup({loading}) {
   const signupForm = {
-    signupForm: {
       email: {
         value: '',
         valid: false,
@@ -27,20 +26,19 @@ export default function Signup({loading}) {
         validators: [required]
       },
       formIsValid: false
-    }
   }
 
   const [ signupFormObj, setSignupFormObj ] = useState(signupForm)
 
   const inputChangeHandler = (input, value) => {
       let isValid = true
-      for (const validator of signupFormObj.signupForm[input].validators) {
+      for (const validator of signupFormObj[input].validators) {
         isValid = isValid && validator(value)
       }
       const updatedForm = {
-        ...signupFormObj.signupForm,
+        ...signupFormObj,
         [input]: {
-          ...signupFormObj.signupForm[input],
+          ...signupFormObj[input],
           valid: isValid,
           value: value
         }
@@ -58,9 +56,9 @@ export default function Signup({loading}) {
   const inputBlurHandler = input => {
     return {
       signupForm: {
-        ...signupFormObj.signupForm,
+        ...signupFormObj,
         [input]: {
-          ...signupFormObj.signupForm[input],
+          ...signupFormObj[input],
           touched: true
         }
       }
@@ -81,9 +79,9 @@ export default function Signup({loading}) {
           control="input"
           onChange={inputChangeHandler}
           onBlur={inputBlurHandler.bind(this, 'email')}
-          value={signupForm['email'].value}
-          valid={signupForm['email'].valid}
-          touched={signupForm['email'].touched}
+          value={signupFormObj['email'].value}
+          valid={signupFormObj['email'].valid}
+          touched={signupFormObj['email'].touched}
         />
         <Input
           id="name"
@@ -92,9 +90,9 @@ export default function Signup({loading}) {
           control="input"
           onChange={inputChangeHandler}
           onBlur={inputBlurHandler.bind(this, 'name')}
-          value={signupForm['name'].value}
-          valid={signupForm['name'].valid}
-          touched={signupForm['name'].touched}
+          value={signupFormObj['name'].value}
+          valid={signupFormObj['name'].valid}
+          touched={signupFormObj['name'].touched}
         />
         <Input
           id="password"
@@ -103,9 +101,9 @@ export default function Signup({loading}) {
           control="input"
           onChange={inputChangeHandler}
           onBlur={inputBlurHandler.bind(this, 'password')}
-          value={signupForm['password'].value}
-          valid={signupForm['password'].valid}
-          touched={signupForm['password'].touched}
+          value={signupFormObj['password'].value}
+          valid={signupFormObj['password'].valid}
+          touched={signupFormObj['password'].touched}
         />
         <Button design="raised" type="submit" loading={loading}>
           Signup
