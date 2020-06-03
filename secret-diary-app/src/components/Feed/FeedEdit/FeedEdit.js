@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react'
 
 import Backdrop from '../../Backdrop/Backdrop'
 import Modal from '../../Modal/Modal'
+import Button from '../../Button/Button'
 import Input from '../../Form/Input/Input'
 import FilePicker from '../../Form/Input/FilePicker'
 import Image from '../../Image/Image'
@@ -183,6 +184,7 @@ export default function FeedEdit({editing, selectedPost, loading, onCancelEdit, 
             touched={postFormObj.content.touched}
             value={postFormObj.content.value}
           />
+          <Button>submit</Button>
         </form>
       </Modal>
     </Fragment>
